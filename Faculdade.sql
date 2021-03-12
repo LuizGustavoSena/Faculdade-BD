@@ -87,22 +87,27 @@ BEGIN
 	
 	-- ATUALIZAÇÃO DA MENOR NOTA PARA A NOTA DA SUBSTITUTIVA
 	IF @NOTA1 > @NOTA2 -- NOTA 2 É A MENOR
-	UPDATE Possui
-	SET nota_b2 = 
-	(CASE
-		WHEN @SUB is NULL  THEN nota_b2
-		ELSE(@SUB)
-	END 
-	) 
-	IF @NOTA1< @NOTA2 -- NOTA 1 É A MENOR
-	UPDATE Possui
-	SET nota_b1 = 
-	(CASE
-		WHEN @SUB is NULL  THEN nota_b1
-		ELSE(@SUB)
-	END 
-	)
+		UPDATE Possui
+		SET nota_b2 = 
+		(CASE
+			WHEN @SUB is NULL  THEN nota_b2
+			ELSE(@SUB)
+		END 
+		)
+		
+	ELSE -- NOTA 1 É A MENOR
+		UPDATE Possui
+		SET nota_b1 = 
+		(CASE
+			WHEN @SUB is NULL  THEN nota_b1
+			ELSE(@SUB)
+		END 
+		)
 
+	-- ATUALIZA AS VARIAVEIS COM A NOVA NOTA CASO TENHA SUB
+	SELECT @NOTA2 = nota_b2, @NOTA1 = nota_b1 
+	FROM Possui 
+	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE
 	-- CALCULA MEDIA
 	SET @MEDIA=(@NOTA1+@NOTA2)/2
 
@@ -130,7 +135,7 @@ END;
 
 --INSERÇÃO DE DISCIPLINA ALUNO
 INSERT INTO Possui(ra,nome_disciplina,ano,semestre,falta,nota_b1,nota_b2)
-VALUES(2,'Programação linear',2020,1,0,2,5)
+VALUES(2,'Inglês',2018,1,0,6,6)
 
 --IMPRESSÕES
 SELECT * FROM Disciplina
@@ -139,15 +144,15 @@ SELECT * FROM Possui
 --SERVE PARA INSERIR DEPOIS DA INSERÇÃO
 UPDATE Possui
 SET sub = 6
-WHERE ra = 2 AND semestre = 1 AND nome_disciplina = 'Programacao linear'
+WHERE ra = 1 AND semestre = 2 AND nome_disciplina = 'Programação BD'
 
 UPDATE Possui
 SET falta = 10
 WHERE ra = 1 AND semestre = 1 AND nome_disciplina = 'Redes de Comput'
 
 UPDATE Possui
-SET nota_b1 = 6
-WHERE ra = 1 AND nome_disciplina = 'Estrutura de Dados'
+SET nota_b1 = 4
+WHERE ra = 1 AND semestre = 2 AND nome_disciplina = 'Programação BD'
 
 -- INSERÇÕES DE DADOS NO BD
 INSERT INTO Curso
