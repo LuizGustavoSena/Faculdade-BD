@@ -94,6 +94,7 @@ BEGIN
 			ELSE(@SUB)
 		END 
 		)
+		WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 		
 	ELSE -- NOTA 1 É A MENOR
 		UPDATE Possui
@@ -103,11 +104,12 @@ BEGIN
 			ELSE(@SUB)
 		END 
 		)
+		WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 
 	-- ATUALIZA AS VARIAVEIS COM A NOVA NOTA CASO TENHA SUB
 	SELECT @NOTA2 = nota_b2, @NOTA1 = nota_b1 
 	FROM Possui 
-	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND @ANO = ano
+	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 	-- CALCULA MEDIA
 	SET @MEDIA=(@NOTA1+@NOTA2)/2
 
@@ -130,7 +132,7 @@ BEGIN
 		
 	END 
 	)-- CONDIÇÃO PARA ATUALIZAR OS DADOS DO ALUNO QUE ESTA INSERINDO/ALTERANDO 
-	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND @ANO = ano
+	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 END;
 
 --INSERÇÃO DE DISCIPLINA ALUNO
@@ -143,16 +145,16 @@ SELECT * FROM Possui
 
 --SERVE PARA INSERIR DEPOIS DA INSERÇÃO
 UPDATE Possui
-SET sub = 6
-WHERE ra = 1 AND semestre = 2 AND nome_disciplina = 'Programação BD'
+SET sub = 7
+WHERE ra = 2 AND semestre = 2 AND ano = 2020 AND nome_disciplina = 'Matematica Discreta'
 
 UPDATE Possui
 SET falta = 10
 WHERE ra = 2 AND semestre = 1 AND ano = 2021 AND nome_disciplina = 'Programação linear'
 
 UPDATE Possui
-SET nota_b1 = 4
-WHERE ra = 1 AND semestre = 2 AND ano = 2019 AND nome_disciplina = 'Programação BD'
+SET nota_b1 = 6
+WHERE ra = 2 AND semestre = 1 AND ano = 2020 AND nome_disciplina = 'Programação linear'
 
 -- INSERÇÕES DE DADOS NO BD
 INSERT INTO Curso
