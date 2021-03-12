@@ -88,7 +88,7 @@ BEGIN
 	-- ATUALIZAÇÃO DA MENOR NOTA PARA A NOTA DA SUBSTITUTIVA
 	IF @NOTA1 > @NOTA2 -- NOTA 2 É A MENOR
 		UPDATE Possui
-		SET nota_b2 = 
+		SET @NOTA2 = 
 		(CASE
 			WHEN @SUB is NULL  THEN nota_b2
 			ELSE(@SUB)
@@ -98,7 +98,7 @@ BEGIN
 		
 	ELSE -- NOTA 1 É A MENOR
 		UPDATE Possui
-		SET nota_b1 = 
+		SET @NOTA1 = 
 		(CASE
 			WHEN @SUB is NULL  THEN nota_b1
 			ELSE(@SUB)
@@ -106,10 +106,6 @@ BEGIN
 		)
 		WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 
-	-- ATUALIZA AS VARIAVEIS COM A NOVA NOTA CASO TENHA SUB
-	SELECT @NOTA2 = nota_b2, @NOTA1 = nota_b1 
-	FROM Possui 
-	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND ano = @ANO
 	-- CALCULA MEDIA
 	SET @MEDIA=(@NOTA1+@NOTA2)/2
 
@@ -146,7 +142,7 @@ SELECT * FROM Possui
 --SERVE PARA INSERIR DEPOIS DA INSERÇÃO
 UPDATE Possui
 SET sub = 7
-WHERE ra = 2 AND semestre = 2 AND ano = 2020 AND nome_disciplina = 'Matematica Discreta'
+WHERE ra = 2 AND semestre = 1 AND ano = 2020 AND nome_disciplina = 'Programação linear'
 
 UPDATE Possui
 SET falta = 10
