@@ -56,9 +56,8 @@ CREATE TABLE Possui
 
 	CONSTRAINT fkPossuiRa FOREIGN KEY(ra) REFERENCES Aluno(ra),
 	CONSTRAINT fkPossuiNomeDisciplina FOREIGN KEY(nome_disciplina) REFERENCES Disciplina(nome_disciplina),
-	CONSTRAINT pkPossuiRaNomeDisciplina PRIMARY KEY(ra,nome_disciplina,semestre)
+	CONSTRAINT pkPossuiRaNomeDisciplina PRIMARY KEY(ra,nome_disciplina,semestre, ano)
 );
-
 -- REMOÇÃO DO TRIGGER
 DROP TRIGGER TatualizaSituacao
 
@@ -73,6 +72,7 @@ BEGIN
 		@SUB DECIMAL(4,2),
 		@NOME VARCHAR(20),
 		@RA INT,
+		@ANO INT,
 		@SEMESTRE INT,
 		@NOTA1 DECIMAL(4,2) ,
 		@NOTA2 DECIMAL(4,2),
@@ -82,7 +82,7 @@ BEGIN
 		@PORCENTAGEM DECIMAL(4,2)
 
 	-- ATRIBUIÇÃO DE VARIAVEIS
-	SELECT @RA = ra, @NOME = nome_disciplina,@SEMESTRE = semestre ,@FAlTA = falta,@NOTA1 = nota_b1 , @NOTA2 = nota_b2, @SUB = sub
+	SELECT @RA = ra, @NOME = nome_disciplina,@SEMESTRE = semestre ,@FAlTA = falta,@ANO = ano, @NOTA1 = nota_b1 , @NOTA2 = nota_b2, @SUB = sub
 	FROM INSERTED
 	
 	-- ATUALIZAÇÃO DA MENOR NOTA PARA A NOTA DA SUBSTITUTIVA
@@ -107,7 +107,7 @@ BEGIN
 	-- ATUALIZA AS VARIAVEIS COM A NOVA NOTA CASO TENHA SUB
 	SELECT @NOTA2 = nota_b2, @NOTA1 = nota_b1 
 	FROM Possui 
-	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE
+	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND @ANO = ano
 	-- CALCULA MEDIA
 	SET @MEDIA=(@NOTA1+@NOTA2)/2
 
@@ -130,12 +130,12 @@ BEGIN
 		
 	END 
 	)-- CONDIÇÃO PARA ATUALIZAR OS DADOS DO ALUNO QUE ESTA INSERINDO/ALTERANDO 
-	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE
+	WHERE ra = @RA AND nome_disciplina = @NOME  AND semestre = @SEMESTRE AND @ANO = ano
 END;
 
 --INSERÇÃO DE DISCIPLINA ALUNO
 INSERT INTO Possui(ra,nome_disciplina,ano,semestre,falta,nota_b1,nota_b2)
-VALUES(2,'Inglês',2018,1,0,6,6)
+VALUES(2,'Programação linear',2021,1,0,8,7)
 
 --IMPRESSÕES
 SELECT * FROM Disciplina
@@ -148,11 +148,11 @@ WHERE ra = 1 AND semestre = 2 AND nome_disciplina = 'Programação BD'
 
 UPDATE Possui
 SET falta = 10
-WHERE ra = 1 AND semestre = 1 AND nome_disciplina = 'Redes de Comput'
+WHERE ra = 2 AND semestre = 1 AND ano = 2021 AND nome_disciplina = 'Programação linear'
 
 UPDATE Possui
 SET nota_b1 = 4
-WHERE ra = 1 AND semestre = 2 AND nome_disciplina = 'Programação BD'
+WHERE ra = 1 AND semestre = 2 AND ano = 2019 AND nome_disciplina = 'Programação BD'
 
 -- INSERÇÕES DE DADOS NO BD
 INSERT INTO Curso
